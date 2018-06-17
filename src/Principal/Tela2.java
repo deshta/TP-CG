@@ -6,11 +6,13 @@
 package Principal;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import javax.swing.JColorChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -53,6 +55,7 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
         cor = new javax.swing.JMenuItem();
         limpar = new javax.swing.JMenuItem();
         desfazer = new javax.swing.JMenuItem();
+        rotacionar = new javax.swing.JMenuItem();
         reta = new javax.swing.JMenu();
         desenharR = new javax.swing.JMenuItem();
         circun = new javax.swing.JMenu();
@@ -131,6 +134,10 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
             }
         });
         editar.add(desfazer);
+
+        rotacionar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        rotacionar.setText("Rotacionar");
+        editar.add(rotacionar);
 
         barraMenu.add(editar);
 
@@ -217,7 +224,12 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
     }//GEN-LAST:event_sairActionPerformed
 
     private void sobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sobreActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Trabalho Prático de Computação Gráfica - PUC Minas\n\n" 
+                                      +"Professora: Rosilane Ribeiro da Mota\n" 
+                                      +"Programadores:\n"
+                                      +"Guilherme Moreira Nunes\n"
+                                      +"Guilherme José Lana\n"
+                                      +"Rafael Oliveira Mendes Lima");
     }//GEN-LAST:event_sobreActionPerformed
 
     private void corActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_corActionPerformed
@@ -251,26 +263,20 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
     }//GEN-LAST:event_limparActionPerformed
 
     private void desfazerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desfazerActionPerformed
-        if (isReta && !pilhaR.isEmpty()) {
-            Reta r;
-            pilhaR.remove(pilhaR.size() - 1);
-            for(int i = 0; i < pilhaR.size(); i++)
-            {
-                r = pilhaR.get(i);
-                if(r.isAliasing)
-                {
-                    r.draw(area);
-                }
-                else
-                {
-                    r.cor = Color.WHITE;
-                    r.draw(area);
-                }
+        Graphics g = area.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 1280, 690);
+        Reta r;
+        if (!pilhaR.isEmpty()) {
+            for (int i = 0; i < pilhaR.size(); i++) {
+                pilhaR.get(i).draw(area);
             }
-        } else {
-            if (isCircun && !pilhaC.isEmpty()) {
-                Circun p = pilhaC.remove(pilhaC.size() - 1);
-                drawCircun(p.pC, p.r);
+        }
+
+        Circun c;
+        if (!pilhaC.isEmpty()) {
+            for (int i = 0; i < pilhaC.size(); i++) {
+                pilhaC.get(i).draw(area);
             }
         }
     }//GEN-LAST:event_desfazerActionPerformed
@@ -284,7 +290,7 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
     }//GEN-LAST:event_aliasingActionPerformed
 
     public void start() {
-        addMouseListener(this);        // listens for own mouse and
+        addMouseListener(this);
         add(area);
     }
 
@@ -337,6 +343,7 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
     private javax.swing.JMenu editar;
     private javax.swing.JMenuItem limpar;
     private javax.swing.JMenu reta;
+    private javax.swing.JMenuItem rotacionar;
     private javax.swing.JMenuItem sair;
     private javax.swing.JMenuItem sobre;
     // End of variables declaration//GEN-END:variables
