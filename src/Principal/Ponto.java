@@ -17,15 +17,30 @@ public class Ponto extends JPanel{
     int x;
     int y;
     
-    public Ponto(){
-        
+    /*
+     * Construtor vazio do método Ponto.
+    */
+    public Ponto(){   
     }
     
+    /**
+     * O método ponto que recebe coordenada de ponto.
+     * @param int x, coordenada de um ponto  recebido pelo metodo Ponto.
+     * @param int y, coordenada de um ponto recebido pelo metodo Ponto.
+     * @return retorna as coordenadas do ponto
+     */
     public Ponto(int x, int y){
         this.x = x;
         this.y = y;
     }
     
+
+    /**
+     * O método draw recebe a área a ser desenhada e a cor do ponto.
+     * @param Graphics p, área a ser desenhada o ponto.
+     * @param Color cor, cor do ponto.
+     * @return null
+     */
     public void draw(Graphics p, Color cor){
         p.setColor(cor);
         p.drawLine(x, y, x, y);

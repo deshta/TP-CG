@@ -21,10 +21,19 @@ public class Reta extends javax.swing.JPanel {
     Color cor;
     boolean aliasing;
 
+    /**
+        * O construtor vazio do metodo da reta.
+    */
     public Reta() {
-
     }
 
+    /**
+     * O método Reta recebe os pontos inicial, final e a cor da reta.
+     * @param Ponto p1, ponto inicial recebido.
+     * @param Ponto p2, ponto final recebido.
+     * @param Color cor,cor desejada para a linha.
+     * @return retorna as coordenadas de dois pontos e a cor desejada pelo usuario.
+    */
     public Reta(Ponto p1, Ponto p2, Color cor, boolean a) {
         this.p1 = p1;
         this.p2 = p2;
@@ -32,6 +41,11 @@ public class Reta extends javax.swing.JPanel {
         this.aliasing = a;
     }
 
+    /**
+     * O método pontos recebe os pontos inicial e final.
+     * @param Graphics area, tela onde será plotada a reta.
+     * @return null
+    */
     public void draw(Graphics area) {
         int dx, dy, xIncr, yIncr, p;
         int c1, c2;
@@ -91,6 +105,13 @@ public class Reta extends javax.swing.JPanel {
         }
     }
 
+
+    /**
+     * O método rotacionar recebe a área e em quantos graus a reta será rotacionada
+     * @param Graphics area, area onde será plotada a reta a ser rotacionada.
+     * @param Double grau, angulo em graus em que a reta será rotacionada.
+     * @return null.
+    */
     public void rotacionar(Graphics area, double grau) {
         double rad = ((Math.PI / 180) * grau);
         float auxX2 = p2.x - p1.x;
@@ -104,6 +125,14 @@ public class Reta extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * O método plot recebe duas variáveis que representam um ponto e o coeficiente de cor que será colocado para
+     * realizar o anti-aliasing.
+     * @param Double x, variavel x recebida pelo metodo plot para representar uma coordenada do ponto.
+     * @param Double y, variavel y recebida pelo metodo plot para representar uma coordenada do ponto.
+     * @param Double c, variavel c recebida pelo metodo plot para representar o coeficiente da cor solicitada.
+     * @return null.
+    */
     void plot(Graphics g, double x, double y, double c) {
         g.setColor(new Color(cor.getRed() / 255, cor.getGreen() / 255, cor.getBlue() / 255, (float) c));
         g.fillOval((int) x, (int) y, 2, 2);
@@ -150,11 +179,11 @@ public class Reta extends javax.swing.JPanel {
         if (dx == 0.0) {
             gradient = 1.0;
         }
-        // handle first endpoint
+        
         double xend = round(p1.x);
         double yend = p1.y + gradient * (xend - p1.x);
         double xgap = rfpart(p1.x + 0.5);
-        double xpxl1 = xend; // this will be used in the main loop
+        double xpxl1 = xend;
         double ypxl1 = ipart(yend);
 
         if (steep) {
@@ -165,14 +194,14 @@ public class Reta extends javax.swing.JPanel {
             plot(p, xpxl1, ypxl1 + 1, fpart(yend) * xgap);
         }
 
-        // first y-intersection for the main loop
+        
         double intery = yend + gradient;
 
-        // handle second endpoint
+        
         xend = round(p2.x);
         yend = p2.y + gradient * (xend - p2.x);
         xgap = fpart(p2.x + 0.5);
-        double xpxl2 = xend; // this will be used in the main loop
+        double xpxl2 = xend;
         double ypxl2 = ipart(yend);
 
         if (steep) {
@@ -183,7 +212,7 @@ public class Reta extends javax.swing.JPanel {
             plot(p, xpxl2, ypxl2 + 1, fpart(yend) * xgap);
         }
 
-        // main loop
+        
         for (double x = xpxl1 + 1; x <= xpxl2 - 1; x++) {
             if (steep) {
                 plot(p, ipart(intery), x, rfpart(intery));
