@@ -5,14 +5,20 @@
  */
 package Principal;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import javax.swing.JColorChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -29,6 +35,8 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
     ArrayList<Reta> pilhaR = new ArrayList<Reta>();
     ArrayList<Circun> pilhaC = new ArrayList<Circun>();
     int x2, y2, x1, y1;
+    Ponto pR1 = new Ponto();
+    Ponto pR2 = new Ponto();
 
     /**
      * Creates new form Tela2
@@ -65,6 +73,7 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bresenham");
+        setBackground(new java.awt.Color(255, 255, 255));
 
         area.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -135,8 +144,14 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
         });
         editar.add(desfazer);
 
+        rotacionar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         rotacionar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         rotacionar.setText("Rotacionar");
+        rotacionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rotacionarActionPerformed(evt);
+            }
+        });
         editar.add(rotacionar);
 
         barraMenu.add(editar);
@@ -200,17 +215,17 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
     public void drawReta(Ponto p1, Ponto p2) {
         Reta r;
 
-        r = new Reta(p1, p2, corSelecionada, chkAliasing);
+        r = new Reta(p1, p2, corSelecionada, false);
         pilhaR.add(r);
-        r.draw(area);
+        r.draw(area.getGraphics());
     }
 
     public void drawRetaAli(Ponto p1, Ponto p2) {
         Reta r;
 
-        r = new Reta(p1, p2, corSelecionada, chkAliasing);
+        r = new Reta(p1, p2, corSelecionada, true);
         pilhaR.add(r);
-        r.drawAli(area);
+        r.drawAli(area.getGraphics());
     }
 
 
@@ -220,16 +235,16 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
     }//GEN-LAST:event_desenharRActionPerformed
 
     private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_sairActionPerformed
 
     private void sobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sobreActionPerformed
-        JOptionPane.showMessageDialog(null, "Trabalho Prático de Computação Gráfica - PUC Minas\n\n" 
-                                      +"Professora: Rosilane Ribeiro da Mota\n" 
-                                      +"Programadores:\n"
-                                      +"Guilherme Moreira Nunes\n"
-                                      +"Guilherme José Lana\n"
-                                      +"Rafael Oliveira Mendes Lima");
+        JOptionPane.showMessageDialog(null, "Trabalho Prático de Computação Gráfica - PUC Minas\n\n"
+                + "Professora: Rosilane Ribeiro da Mota\n\n"
+                + "Programadores:\n"
+                + "Guilherme Moreira Nunes\n"
+                + "Guilherme José Lana\n"
+                + "Rafael Oliveira Mendes Lima");
     }//GEN-LAST:event_sobreActionPerformed
 
     private void corActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_corActionPerformed
@@ -241,7 +256,7 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
 
         c = new Circun(r, pc, corSelecionada, chkAliasing);
         pilhaC.add(c);
-        c.draw(area);
+        c.draw(area.getGraphics());
     }
 
     public void drawCircunAli(Ponto pc, int r) {
@@ -264,19 +279,18 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
 
     private void desfazerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desfazerActionPerformed
         Graphics g = area.getGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 1280, 690);
+        g.clearRect(0, 0, 1280, 690);
         Reta r;
         if (!pilhaR.isEmpty()) {
             for (int i = 0; i < pilhaR.size(); i++) {
-                pilhaR.get(i).draw(area);
+                pilhaR.get(i).draw(area.getGraphics());
             }
         }
 
         Circun c;
         if (!pilhaC.isEmpty()) {
             for (int i = 0; i < pilhaC.size(); i++) {
-                pilhaC.get(i).draw(area);
+                pilhaC.get(i).draw(area.getGraphics());
             }
         }
     }//GEN-LAST:event_desfazerActionPerformed
@@ -288,6 +302,34 @@ public class Tela2 extends javax.swing.JFrame implements MouseListener, MouseMot
             chkAliasing = false;
         }
     }//GEN-LAST:event_aliasingActionPerformed
+
+
+    private void rotacionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rotacionarActionPerformed
+        if (!pilhaR.isEmpty()) {
+            JPanel p = new JPanel(new BorderLayout(5, 5));
+            JPanel labels = new JPanel(new GridLayout(0, 1, 2, 2));
+            labels.add(new JLabel("Grau:", SwingConstants.RIGHT));
+            p.add(labels, BorderLayout.WEST);
+
+            JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2));
+            JTextField grau = new JTextField();
+            controls.add(grau);
+            p.add(controls, BorderLayout.CENTER);
+
+            JOptionPane.showMessageDialog(area, p, "Digite o grau", JOptionPane.QUESTION_MESSAGE);
+            int aux = Integer.parseInt(grau.getText());
+            Graphics g = area.getGraphics();
+            g.clearRect(0, 0, 1280, 690);
+            for (int i = 0; i < pilhaR.size(); i++) {
+                Reta r = pilhaR.get(i);
+                if (r.aliasing) {
+                    r.rotacionar(g, aux);
+                } else {
+                    r.rotacionar(g, aux);
+                }
+            }
+        }
+    }//GEN-LAST:event_rotacionarActionPerformed
 
     public void start() {
         addMouseListener(this);

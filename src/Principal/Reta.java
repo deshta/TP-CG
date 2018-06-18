@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import static java.lang.Math.floor;
 import static java.lang.Math.round;
-import javax.swing.JPanel;
 
 /**
  *
@@ -20,7 +19,7 @@ public class Reta extends javax.swing.JPanel {
     Ponto p1;
     Ponto p2;
     Color cor;
-    boolean isAliasing;
+    boolean aliasing;
 
     public Reta() {
 
@@ -30,10 +29,10 @@ public class Reta extends javax.swing.JPanel {
         this.p1 = p1;
         this.p2 = p2;
         this.cor = cor;
-        this.isAliasing = a;
+        this.aliasing = a;
     }
 
-    public void draw(JPanel area) {
+    public void draw(Graphics area) {
         int dx, dy, xIncr, yIncr, p;
         int c1, c2;
         int x, y;
@@ -92,9 +91,21 @@ public class Reta extends javax.swing.JPanel {
         }
     }
 
-    void plot(JPanel p, double x, double y, double c) {
-        Graphics g = p.getGraphics();
-        g.setColor(new Color(cor.getRed()/255, cor.getGreen()/255, cor.getBlue()/255, (float) c));
+    public void rotacionar(Graphics area, double grau) {
+        double rad = ((Math.PI / 180) * grau);
+        float auxX2 = p2.x - p1.x;
+        float auxY2 = p2.y - p1.y;
+        p2.x = (int) (auxX2 * Math.cos(rad) - auxY2 * Math.sin(rad)) + p1.x;
+        p2.y = (int) (auxX2 * Math.sin(rad) + auxY2 * Math.cos(rad)) + p1.y;
+        if (aliasing) {
+            drawAli(area);
+        } else {
+            draw(area);
+        }
+    }
+
+    void plot(Graphics g, double x, double y, double c) {
+        g.setColor(new Color(cor.getRed() / 255, cor.getGreen() / 255, cor.getBlue() / 255, (float) c));
         g.fillOval((int) x, (int) y, 2, 2);
     }
 
@@ -109,16 +120,15 @@ public class Reta extends javax.swing.JPanel {
     double rfpart(double x) {
         return 1.0 - fpart(x);
     }
-    
 
-    void drawAli(JPanel p) {
+    void drawAli(Graphics p) {
         boolean steep = Math.abs(p2.y - p1.y) > Math.abs(p2.x - p1.x);
-        
+
         if (steep) {
             int aux = p1.x;
             p1.x = p1.y;
             p1.y = aux;
-            
+
             aux = p2.x;
             p2.x = p2.y;
             p2.y = aux;
@@ -128,17 +138,18 @@ public class Reta extends javax.swing.JPanel {
             int aux = p1.x;
             p1.x = p2.x;
             p2.x = aux;
-            
+
             aux = p1.y;
             p1.y = p2.y;
-            p2.y = aux; 
+            p2.y = aux;
         }
 
         double dx = p2.x - p1.x;
         double dy = p2.y - p1.y;
         double gradient = dy / dx;
-        if(dx == 0.0)
+        if (dx == 0.0) {
             gradient = 1.0;
+        }
         // handle first endpoint
         double xend = round(p1.x);
         double yend = p1.y + gradient * (xend - p1.x);

@@ -6,6 +6,7 @@
 package Principal;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
@@ -30,7 +31,7 @@ public class Circun {
         this.isAliasing = a;
     }
 
-    public void desenhaCirculo(int xc, int yc, int x, int y, JPanel area) {
+    public void desenhaCirculo(int xc, int yc, int x, int y, Graphics area) {
         new Ponto(xc + x, yc + y).draw(area, cor);
         new Ponto(xc - x, yc + y).draw(area, cor);
         new Ponto(xc + x, yc - y).draw(area, cor);
@@ -41,7 +42,7 @@ public class Circun {
         new Ponto(xc - y, yc - x).draw(area, cor);
     }
 
-    public void draw(JPanel area) {
+    public void draw(Graphics area) {
 
         int x = 0, y = r;
         int p = 3 - 2 * r;

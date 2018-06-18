@@ -26,9 +26,8 @@ public class Ponto extends JPanel{
         this.y = y;
     }
     
-    public void draw(JPanel p, Color cor){
-        Graphics g = p.getGraphics();
-        g.setColor(cor);
-        g.drawLine(x, y, x, y);
+    public void draw(Graphics p, Color cor){
+        p.setColor(cor);
+        p.drawLine(x, y, x, y);
     }
 }
